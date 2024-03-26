@@ -1,0 +1,60 @@
+import java.util.Scanner;
+
+public class Calculadora {
+
+    public static double adicionar(double numero1, double numero2) {
+        return numero1 + numero2;
+    }
+
+    public static double subtrair(double numero1, double numero2) {
+        return numero1 - numero2;
+    }
+
+    public static double multiplicar(double numero1, double numero2) {
+        return numero1 * numero2;
+    }
+
+    public static double dividir(double numero1, double numero2) {
+        if (numero2 == 0) {
+            System.out.println("Erro: Divisão por zero não é permitida.");
+            return Double.NaN; 
+        }
+        return numero1 / numero2;
+    }
+
+    public static void main(String[] args) {
+        double num1, num2, resultado;
+
+        Scanner scan = new Scanner(System.in);
+        System.out.println("digite o primeiro numero:");
+        num1 = scan.nextDouble(); 
+        System.out.println("digite o segundo numero:");
+        num2 = scan.nextDouble(); 
+
+        System.out.println("Escolha a operação:");
+        System.out.println("1 - Adição");
+        System.out.println("2 - Subtração");
+        System.out.println("3 - Multiplicação");
+        System.out.println("4 - Divisão");
+        int aux = scan.nextInt(); 
+
+        switch (aux) {
+            case 1:
+            resultado = adicionar(num1, num2);
+            break;
+        case 2:
+            resultado = subtrair(num1, num2);
+            break;
+        case 3:
+            resultado = multiplicar(num1, num2);
+            break;
+        case 4:
+            resultado = dividir(num1, num2);
+            break;
+        default:
+            System.out.println("Escolha inválida.");
+            return;
+        }
+        System.out.println("Resultado: " + resultado);
+    }
+}
