@@ -1,0 +1,80 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Contato {
+    private String nome;
+    private String telefone;
+
+    public Contato(String nome, String telefone) {
+        this.nome = nome;
+        this.telefone = telefone;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+}
+
+class Agenda {
+    private List<Contato> contatos;
+
+    public Agenda() {
+        contatos = new ArrayList<>();
+    }
+
+    public void adicionarContato(Contato contato) {
+        contatos.add(contato);
+        System.out.println("Contato adicionado com sucesso.");
+    }
+
+    public Contato buscarContatoPorNome(String nome) {
+        for (Contato contato : contatos) {
+            if (contato.getNome().equalsIgnoreCase(nome)) {
+                return contato;
+            }
+        }
+        return null;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Agenda agenda = new Agenda();
+
+        System.out.println("Quantos contatos deseja adicionar?");
+        int totalContatos = scanner.nextInt();
+        scanner.nextLine(); // Limpar o buffer
+
+        for (int i = 0; i < totalContatos; i++) {
+            System.out.println("Informe o nome do contato:");
+            String nome = scanner.nextLine();
+
+            System.out.println("Informe o telefone do contato:");
+            String telefone = scanner.nextLine();
+
+            Contato novoContato = new Contato(nome, telefone);
+            agenda.adicionarContato(novoContato);
+        }
+
+        System.out.println("\nBusca de Contato:");
+        System.out.println("Informe o nome do contato a ser buscado:");
+        String nomeBusca = scanner.nextLine();
+
+        Contato resultadoBusca = agenda.buscarContatoPorNome(nomeBusca);
+        if (resultadoBusca != null) {
+            System.out.println("Contato encontrado:");
+            System.out.println("Nome: " + resultadoBusca.getNome());
+            System.out.println("Telefone: " + resultadoBusca.getTelefone());
+        } else {
+            System.out.println("Contato não encontrado.");
+        }
+
+        scanner.close();
+    }
+}
