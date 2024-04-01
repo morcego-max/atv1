@@ -1,0 +1,186 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Produto {
+    private String nome;
+    private int codigo;
+    private double preco;
+    private int quantidadeEstoque;
+
+    public Produto(String nome, int codigo, double preco, int quantidadeEstoque) {
+        this.nome = nome;
+        this.codigo = codigo;
+        this.preco = preco;
+        this.quantidadeEstoque = quantidadeEstoque;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public int getQuantidadeEstoque() {
+        return quantidadeEstoque;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
+    }
+
+    public void adicionarEstoque(int quantidade) {
+        quantidadeEstoque += quantidade;
+    }
+
+    public void removerEstoque(int quantidade) {
+        if (quantidade <= quantidadeEstoque) {
+            quantidadeEstoque -= quantidade;
+        } else {
+            System.out.println("Quantidade insuficiente em estoque.");
+        }
+    }
+}
+
+public class Main {
+    private static List<Produto> estoque = new ArrayList<>();
+    private static int codigoAtual = 1;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        boolean continuar = true;
+        while (continuar) {
+            System.out.println("\n===== Menu =====");
+            System.out.println("1. Adicionar Produto");
+            System.out.println("2. Atualizar Preço do Produto");
+            System.out.println("3. Adicionar Estoque");
+            System.out.println("4. Remover Estoque");
+            System.out.println("5. Gerar Relatório de Estoque");
+            System.out.println("6. Sair");
+            System.out.print("Escolha uma opção: ");
+            int opcao = scanner.nextInt();
+            scanner.nextLine(); // Limpar o buffer
+
+            switch (opcao) {
+                case 1:
+                    adicionarProduto(scanner);
+                    break;
+                case 2:
+                    atualizarPreco(scanner);
+                    break;
+                case 3:
+                    adicionarEstoque(scanner);
+                    break;
+                case 4:
+                    removerEstoque(scanner);
+                    break;
+                case 5:
+                    gerarRelatorioEstoque();
+                    break;
+                case 6:
+                    continuar = false;
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+            }
+        }
+
+        scanner.close();
+    }
+
+    private static void adicionarProduto(Scanner scanner) {
+        System.out.println("\n=== Adicionar Produto ===");
+        System.out.print("Nome do Produto: ");
+        String nome = scanner.nextLine();
+
+        System.out.print("Preço do Produto: ");
+        double preco = scanner.nextDouble();
+
+        System.out.print("Quantidade em Estoque: ");
+        int quantidade = scanner.nextInt();
+
+        Produto produto = new Produto(nome, codigoAtual++, preco, quantidade);
+        estoque.add(produto);
+
+        System.out.println("Produto adicionado com sucesso.");
+    }
+
+    private static void atualizarPreco(Scanner scanner) {
+        System.out.println("\n=== Atualizar Preço do Produto ===");
+        System.out.print("Informe o código do Produto: ");
+        int codigo = scanner.nextInt();
+
+        Produto produto = buscarProdutoPorCodigo(codigo);
+        if (produto != null) {
+            System.out.print("Novo Preço do Produto: ");
+            double novoPreco = scanner.nextDouble();
+            produto.setPreco(novoPreco);
+            System.out.println("Preço atualizado com sucesso.");
+        } else {
+            System.out.println("Produto não encontrado.");
+        }
+    }
+
+    private static void adicionarEstoque(Scanner scanner) {
+        System.out.println("\n=== Adicionar Estoque ===");
+        System.out.print("Informe o código do Produto: ");
+        int codigo = scanner.nextInt();
+
+        Produto produto = buscarProdutoPorCodigo(codigo);
+        if (produto != null) {
+            System.out.print("Quantidade a ser adicionada ao Estoque: ");
+            int quantidade = scanner.nextInt();
+            produto.adicionarEstoque(quantidade);
+            System.out.println("Estoque atualizado com sucesso.");
+        } else {
+            System.out.println("Produto não encontrado.");
+        }
+    }
+
+    private static void removerEstoque(Scanner scanner) {
+        System.out.println("\n=== Remover Estoque ===");
+        System.out.print("Informe o código do Produto: ");
+        int codigo = scanner.nextInt();
+
+        Produto produto = buscarProdutoPorCodigo(codigo);
+        if (produto != null) {
+            System.out.print("Quantidade a ser removida do Estoque: ");
+            int quantidade = scanner.nextInt();
+            produto.removerEstoque(quantidade);
+            System.out.println("Estoque atualizado com sucesso.");
+        } else {
+            System.out.println("Produto não encontrado.");
+        }
+    }
+
+    private static Produto buscarProdutoPorCodigo(int codigo) {
+        for (Produto produto : estoque) {
+            if (produto.getCodigo() == codigo) {
+                return produto;
+            }
+        }
+        return null;
+    }
+
+    private static void gerarRelatorioEstoque() {
+        System.out.println("\n=== Relatório de Estoque ===");
+        if (estoque.isEmpty()) {
+            System.out.println("Não há produtos em estoque.");
+        } else {
+            for (Produto produto : estoque) {
+                System.out.println("Código: " + produto.getCodigo());
+                System.out.println("Nome: " + produto.getNome());
+                System.out.println("Preço: R$" + produto.getPreco());
+                System.out.println("Quantidade em Estoque: " + produto.getQuantidadeEstoque());
+                System.out.println("---------------------------");
+            }
+        }
+    }
+}
